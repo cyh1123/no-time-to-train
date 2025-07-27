@@ -1,15 +1,14 @@
+import argparse
+import os
 import pickle
 import random
-import argparse
-import cv2
-import os
-import numpy as np
-
 from collections import OrderedDict
+
+import cv2
+import numpy as np
 from pycocotools.coco import COCO
 
 from no_time_to_train.dataset.data_utils import is_valid_annotation
-
 from no_time_to_train.dataset.metainfo import METAINFO
 
 
@@ -97,6 +96,7 @@ def sample_memory_dataset(json_file, out_path, memory_length, remove_bad, datase
             else:
                 raise ValueError("Reference for class %d is not enough" % cat_id)
 
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, 'wb') as fw:
         pickle.dump(sampled_data_by_cat, fw)
     print("Results output to: %s" % out_path)
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     if args.dataset == 'coco' or args.dataset == 'default_classes' or args.dataset == 'few_shot_classes' or args.dataset == 'coco_semantic_split_1' \
             or args.dataset == 'coco_semantic_split_2' or args.dataset == 'coco_semantic_split_3' \
             or args.dataset == 'coco_semantic_split_4':
-        all_refs_json_file = "./data/coco/annotations/instances_train2017.json"
+        all_refs_json_file = "data/coco/annotations/instances_val2017.json"
         sample_memory_dataset(all_refs_json_file, args.out_path, args.n_shot, remove_bad=True, dataset=args.dataset)
     elif args.dataset == 'lvis' or args.dataset == 'lvis_common' or args.dataset == 'lvis_frequent' or args.dataset == 'lvis_rare' \
             or args.dataset == 'lvis_minival' or args.dataset == 'lvis_minival_common' or args.dataset == 'lvis_minival_frequent' \

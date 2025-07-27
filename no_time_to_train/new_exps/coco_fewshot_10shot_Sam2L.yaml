@@ -28,9 +28,9 @@ model:
     dataset_cfgs:
       fill_memory:
         name: "coco"
-        root: "./data/coco/train2017"
-        json_file : "./data/coco/annotations/instances_train2017.json"
-        memory_pkl: "./data/coco/annotations_refsam2/memory/train2017_allClasses_length10_v1.pkl"
+        root: "./data/coco/val2017"
+        json_file : "./data/coco/annotations/instances_val2017.json"
+        memory_pkl: "./data/coco/annotations_refsam2/memory/val2017_allClasses_length10_v1.pkl"
         # class_split: "few_shot_classes"
         image_size: 518
         memory_length: 10

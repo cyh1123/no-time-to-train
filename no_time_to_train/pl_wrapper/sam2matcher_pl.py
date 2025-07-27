@@ -1,33 +1,29 @@
-import os
 import copy
+import os
 from typing import Optional
 
 import torch
+import torch.distributed as dist
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import Dataset
 import torch.nn.parallel
-import torch.distributed as dist
 import torch.optim as optim
 import torch.utils.data
 import torch.utils.data.distributed
-
 from pytorch_lightning import LightningModule
+from torch.utils.data import Dataset
 
-
+from no_time_to_train.dataset.coco_ref_dataset import (
+    COCOMemoryFillCropDataset,
+    COCOMemoryFillDataset,
+    COCORefOracleTestDataset,
+    COCORefTestDataset,
+    COCORefTrainDataset,
+)
+from no_time_to_train.dataset.metainfo import METAINFO
 from no_time_to_train.models.Sam2Matcher import Sam2Matcher
 from no_time_to_train.models.Sam2MatchingBaseline import Sam2MatchingBaseline
 from no_time_to_train.models.Sam2MatchingBaseline_noAMG import Sam2MatchingBaselineNoAMG
-
-from no_time_to_train.dataset.metainfo import METAINFO
-
-from no_time_to_train.dataset.coco_ref_dataset import (
-    COCORefTrainDataset,
-    COCOMemoryFillDataset,
-    COCORefTestDataset,
-    COCORefOracleTestDataset,
-    COCOMemoryFillCropDataset
-)
 from no_time_to_train.utils import print_dict
 
 
@@ -125,6 +121,7 @@ class Sam2MatcherLightningModel(LightningModule):
             dataset_cfgs["test"]["class_split"] = dataset_cfgs.pop("test.class_split")
             dataset_cfgs["test"]["cat_names"] = METAINFO[dataset_cfgs["test"]["class_split"]]
         self.test_mode = test_mode
+        model_cfg['class_names'] = dataset_cfgs.get("test", {}).get("cat_names", None)
         self.model_cfg = copy.deepcopy(model_cfg)
 
         model_name = model_cfg.pop("name").lower()

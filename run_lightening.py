@@ -8,16 +8,15 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+import mmengine
 import torch
 import torch.distributed as dist
-import mmengine
-
+from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 from pytorch_lightning.cli import LightningCLI
 from pytorch_lightning.trainer import Trainer
-from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 
-from no_time_to_train.pl_wrapper.sam2ref_pl import RefSam2LightningModel
 from no_time_to_train.pl_wrapper.sam2matcher_pl import Sam2MatcherLightningModel
+from no_time_to_train.pl_wrapper.sam2ref_pl import RefSam2LightningModel
 
 
 def collect_results_cpu(result_part, size=None, tmpdir=None):
